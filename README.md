@@ -1,2 +1,3 @@
-quadco_ftp
+Quadco FTP
 ==========
+Gestionnaire FTP pour Quadco
