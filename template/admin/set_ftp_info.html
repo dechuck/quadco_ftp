@@ -1,0 +1,24 @@
+<!-- INCLUDE _header.html -->
+<div class="container">
+  <!-- Main hero unit for a primary marketing message or call to action -->
+  <div class="hero-unit">
+    <h1>Quadco FTP</h1>
+    <h3>Mettre à jour les informations de connexion au FTP</h3>
+    
+  </div>
+  
+  <legend>FTP infos</legend>
+  <form action="set_ftp_info.php" method="post">
+    <label>Nom de l'hôte</label>
+    <input type="text" name="FTP_host" value="{FTP_HOST}" placeholder="myhost.com ou 121.131.80.08">
+    <label>Numéro du port</label>
+    <input type="text" name="FTP_port" value="{FTP_PORT}" placeholder="Ex : 21 (par défaut) ou 22 (SFTP)">
+    <label>Nom d'utilisateur</label>
+    <input type="text" name="FTP_user" value="{FTP_USER}" placeholder="Nom d'utilisateur du FTP">
+    <label>Mot de passe</label>
+    <input type="password" name="FTP_pass" placeholder="Mot de passe">
+    
+    <label></label>
+    <button type="submit" class="btn">Mettre à jour les informations</button>
+  </form>
+<!-- INCLUDE _footer.html -->

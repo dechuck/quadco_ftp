@@ -1,0 +1,24 @@
+<!-- INCLUDE _header.html -->
+<div class="container">
+  <!-- Main hero unit for a primary marketing message or call to action -->
+  <div class="hero-unit">
+    <h1>Quadco FTP</h1>
+    <h3>Profile</h3>
+  </div>
+  
+    <p>Connecté en tant que : <b>{USER_NAME}</b></p>
+    
+    <legend> Changé le mot de passe </legend>
+    <form action="profile.php" method="post">
+      <label>Nouveau mot de passe</label>
+      <input type="password" name="new_password" placeholder="Mot de passe">
+      <label>Confirmer le mot de passe</label>
+      <input type="password" name="new_password_confirm" placeholder="Confirmer">
+      <label></label>
+      <button type="submit" class="btn">Changer le mot de passe</button>
+    </form>
+
+    <legend>Se déconnecter</legend>
+    <a class="btn" href="{ROOT}modules/logout.php">Déconnecter</a>
+  
+<!-- INCLUDE _footer.html -->

@@ -1,0 +1,25 @@
+<!-- INCLUDE _header.html -->
+<div class="container">
+  <!-- Main hero unit for a primary marketing message or call to action -->
+  <div class="hero-unit">
+    <h1>Quadco FTP</h1>
+    <h3>Ajouter un utilisateur</h3>
+    
+  </div>
+  
+  <form action="add_user.php" method="post">
+    <label>Nom d'utilisateur</label>
+    <input type="text" name="Usr_name" placeholder="Nom">
+    <label>Mot de passe</label>
+    <input type="password" name="Usr_password" placeholder="Mot de passe">
+    <label>Confirmer le mot de passe</label>
+    <input type="password" name="Usr_password_confirm" placeholder="Confirmer">
+    <label>Privilège utilisateur</label>
+    <select name="Usr_class">
+      <option value="6"> Utilisateur normal </option>
+      <option value="1"> Administrateur </option>
+    </select>
+    <label></label>
+    <button type="submit" class="btn">Ajouter l'utilisateur</button>
+  </form>
+<!-- INCLUDE _footer.html -->

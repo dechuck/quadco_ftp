@@ -1,0 +1,32 @@
+
+legend.sub_legend {
+  width: 65%;
+  font-size: 17px;
+  line-height: 30px;
+  margin-left:10px;
+  color: #333333;
+}
+
+.hero-unit p {
+	margin-top:15px;
+	font-size:20px;
+	line-height:30px;
+	text-align:center;
+}
+
+.hero-unit h3, .hero-unit h1{
+	text-align:center;
+}
+
+.hero-unit p, .hero-unit h3 {
+	/*color:white;*/
+}
+
+div.hero-unit {
+	/*background-image: url('../img/rbci_logo.png');
+	background-repeat: no-repeat;
+	background-size: 100% 100%;*/
+	/*color: rgb(200,200,200);*/
+	/*opacity:0.75;
+	filter:alpha(opacity=75);*/ /* For IE8 and earlier */
+}
