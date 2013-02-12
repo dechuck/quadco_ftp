@@ -1,15 +1,15 @@
-Quadco FTP
+ï»¿Quadco FTP
 ==========
 Gestionnaire FTP pour Quadco
 
 
 Installation :
 
-1. Ouvrir includes/config/config.general.php en mode d'édition. Un section, bien indiqué ressemblera à ceci :
+1. Ouvrir includes/config/config.general.php en mode d'Ã©dition. Un section, bien indiquÃ© ressemblera Ã  ceci :
 	
 	/*********** CONFIGURATION A MODIFIER *************/
 	
-	// Informations de connexion à la DB
+	// Informations de connexion Ã  la DB
 	
 	$_CONFIG['DB_HOST']		= '';
 	$_CONFIG['DB_USER']		= '';
@@ -27,19 +27,19 @@ Installation :
 	
 	/************* RIEN D'AUTRE A MODIFIER **************/
 	
-2. Entrer les informations de connexion à la base de donnée dans les $_CONFIG correspondant
+2. Entrer les informations de connexion Ã  la base de donnÃ©e dans les $_CONFIG correspondant
 
 3. $_CONFIG['BASE_FOLDER'] => C'est le chemin de la racine du ftp jusqu'au dossier contenant les dossies /modules /includes /templates, etc.
-	Simplement mettre à cette endroit le path approprié.
+	Simplement mettre Ã  cette endroit le path appropriÃ©.
 
-4. Uploader le dossier racine à l'endroit désiré sur le serveur
+4. Uploader le dossier racine Ã  l'endroit dÃ©sirÃ© sur le serveur
 
-5. Effectué le dump dans la base de donnée (fichier DB_SQL.sql, le dump a été fait à partir de MySQL)
+5. EffectuÃ© le dump dans la base de donnÃ©e (fichier DB_SQL.sql, le dump a Ã©tÃ© fait Ã  partir de MySQL)
 
-6. Par défaut, un utilisateur est créé. User : Admin, pass : admin.
+6. Par dÃ©faut, un utilisateur est crÃ©Ã©. User : Admin, pass : admin.
 
-7. Contactez-moi si une quelconque étape pose problème.
+7. Contactez-moi si une quelconque Ã©tape pose problÃ¨me.
 
-8. Utilisez l'application et dressez la liste des fonctionnalités supplémentaires désirées.
+8. Utilisez l'application et dressez la liste des fonctionnalitÃ©s supplÃ©mentaires dÃ©sirÃ©es.
 
 9. Bonne utilisation!
