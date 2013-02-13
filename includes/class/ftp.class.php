@@ -309,8 +309,8 @@ class ftp {
 
 				if (eregi($regexp, $line, $regs))
 				{
-					if (!eregi("^[.]$", $regs[7])) //hide hidden files
-					if (!eregi("^[.]{2}$", $regs[7])) // don't hide hidden files
+					if (!eregi("^[.]", $regs[7])) //To show hidden file, append $ to the actual pattern
+					if (!eregi("^[.]{2}", $regs[7])) // don't hide hidden files
 					{
 						$i++;
 						if (eregi("^[d]", $regs[1]))
