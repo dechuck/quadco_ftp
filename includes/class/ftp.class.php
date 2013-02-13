@@ -152,17 +152,29 @@ class ftp {
 	}
 	
 	function ftp_get_contents ($filename) { 
-    //Create temp handler: 
-    $tempHandle = fopen('php://temp', 'r+'); 
-    
-    //Get file from FTP: 
-    if (@ftp_fget($this->connection, $tempHandle, $filename, FTP_ASCII, 0)) { 
-        rewind($tempHandle); 
-        return stream_get_contents($tempHandle); 
-    } else { 
-        return false; 
-    } 
+		//Create temp handler: 
+		$tempHandle = fopen('php://temp', 'r+'); 
+		
+		//Get file from FTP: 
+		if (@ftp_fget($this->connection, $tempHandle, $filename, FTP_ASCII, 0)) { 
+			rewind($tempHandle); 
+			return stream_get_contents($tempHandle); 
+		} else { 
+			return false; 
+		} 
 } 
+	
+	/* get file from ftp server */
+	function get_img($file,$destination) {
+		if($destination == ""){
+			$destination = $this->downloadDir;
+		}
+		$ok=true;
+		$fp = fopen($destination, "wb");
+		$ok = ftp_fget($this->connection,$fp,"$file",FTP_BINARY);
+		fclose($fp);
+		return $ok;
+	}
 	
 	/* get file from ftp server */
 	function get($file,$destination) {
@@ -297,8 +309,8 @@ class ftp {
 
 				if (eregi($regexp, $line, $regs))
 				{
-					if (!eregi("^[.]", $regs[7])) //hide hidden files
-					if (!eregi("^[.]{2}", $regs[7])) // don't hide hidden files
+					if (!eregi("^[.]$", $regs[7])) //hide hidden files
+					if (!eregi("^[.]{2}$", $regs[7])) // don't hide hidden files
 					{
 						$i++;
 						if (eregi("^[d]", $regs[1]))

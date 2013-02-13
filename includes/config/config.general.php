@@ -29,12 +29,15 @@
 	
 	/************* RIEN D'AUTRE A MODIFIER **************/
 	
+	// === Si vous voulez changer le dossier de base d'ou le script va se mettre === //
+	// === a explorer le FTP, simplement changer cette configurations. ============= //
+	// === Pourra etre ajoute au panel de configuration si necessaire ============== //
+	$_CONFIG['PATH_FTP'] = '/';
 	
+	// Root path config
 	$_CONFIG['PATH_SUB']		= '';
-	// Rien a toucher. C'est le path complet, de la racine au dossier de base du site
 	$_CONFIG['PATH_ROOT'] 		= $_SERVER['DOCUMENT_ROOT'] . $_CONFIG['BASE_FOLDER'];
 	
-	$_CONFIG['PATH_FTP'] = '/';
 	
 	// Autres configurations
 	$_CONFIG['PATH_MODULES']  	= 'modules/';

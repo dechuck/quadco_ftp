@@ -64,6 +64,7 @@ function configure_FTP()
 	// $base_dir = "/quadcoFTP/";
 	// $base_dir = "/public_html/quadcoFTP";
 	$ftp = new ftp($server, $port, $user, $password);
+	
 	$ftp->setCurrentDir($_SESSION['PATH_FTP']);
 	return $ftp;
 }

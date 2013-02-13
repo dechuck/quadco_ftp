@@ -4,114 +4,45 @@
 	require($root . 'includes/common.php');
 	
 	$_TEMPLATE->set_filenames(array('body' => 'index.html'));
+	
+	// Configure FTP and connect
 	$ftp = configure_FTP();
 	
-	// $html_struct = new HTML_Structure($ftp, "/quadcoFTP");
+	// Build html struct that will be transform in explorer
 	$html_struct = new HTML_Structure($ftp, $_SESSION['PATH_FTP']);
-	
-	//var_dump($ftp->ftp_get_contents('login.php'));
-	
+		
 	$_TEMPLATE->assign_vars(array(
 
 		'TITLE' 		=> 'Quadco FTP',
 		'TAB' 		=> 'Home',
 		'ROOT'			=> $root,
-		'HTML'			=> '<li rel="folder"><a>Quadco</a>' . $html_struct->html . '</li>',
+		'HTML'			=> $html_struct->html,
 	));
-	
-		
 	
 	$_TEMPLATE->display('body');
 	
 	
+	
+	
 	// === UTILS === //
 	
-	// Creates html structure
+	// '/list/of/dir/name' => will return 'name'
+	// '/' => returns itself
+	function get_name_rec($name)
+	{
+		$rec = substr(strstr($name, '/'), 1);
+		if (!$rec || $rec == '')
+			return $name;
+		else
+			return get_name_rec($rec);
+	}
 	
-	// function configure_FTP()
-	// {
-		 // $server="zestecrm.com";
-		// /** FTP server port */
-		 // $port=21;
-		// /** FTP user */
-		 // $user="zestecrm";
-		// /** User specific directory (for zip and download) */
-		 // $userDir="";
-		// /** password */
-		 // $password = "6p*N-f6JJPM.";
-		
-		 // // $server="ftp.Quadco.mobi";
-		// // /** FTP server port */
-		 // // $port=21;
-		// // /** FTP user */
-		// // $user="quadco007";
-		// // /** User specific directory (for zip and download) */
-		 // // $userDir="";
-		// // /** password */
-		 // // $password = "D0nt4get!";
-		// /** FTP connection */
-		 // $connection = "";
-		// /** Passive FTP connection */
-		 // $passive = false;
-		// /** Type of FTP server (UNIX, Windows, ...) */
-		 // $systype = "";
-		// /** Binary (1) or ASCII (0) mode */
-		 // $mode = 1;
-		// /** Logon indicator */
-		 // $loggedOn = false;
-		// /** resume broken downloads */
-		 // $resumeDownload = false;
-		// /** temporary download directory on local server */
-		 // $downloadDir = "";
-		
-		// // $base_dir = "/home/content/64/8016964/html/";
-		// // $base_dir = "/home";
-		// // $base_dir = "/quadcoFTP/";
-		// $base_dir = "/public_html/quadcoFTP";
-		
-		// $ftp = new ftp($server, $port, $user, $password);
-		// // echo $ftp->getCurrentDirectoryShort();
-		// // var_dump($ftp->ftpRawList());
-		// $ftp->setCurrentDir($base_dir);
-		// //$ftp->setCurrentDir($base_dir);
-		// // var_dump(ftp_raw($ftp->connection, 'MKD TEST'));
-		// // var_dump(ftp_raw($ftp->connection, 'PORT a1,a2,a3,a4,p1,p2'));
-		// // var_dump(ftp_raw($ftp->connection, 'CWD /html/home'));
-		// // // var_dump(ftp_raw($ftp->connection, 'TYPE A'));
-		// // // var_dump(ftp_raw($ftp->connection, 'PASV'));
-		// // // var_dump(ftp_raw($ftp->connection, 'LIST -al'));
-		// // var_dump(ftp_raw($ftp->connection, 'TYPE I'));
-		// // var_dump(ftp_raw($ftp->connection, 'PASV'));
-		// // var_dump(ftp_raw($ftp->connection, 'LIST -al'));
-		// // var_dump($ftp->ftpRawList());
-		
-		// return $ftp;
-		// //$top = $ftp->ftpRawList());
-	// }
 	
-	// class Token
-	// {
-		// public $type;
-		// public $token;
-		
-		// public function __construct($token)
-		// {
-			// $this->token = $token;
-		// }
-		
-		// public function add_token()
-		// {
-			// return $token;
-		// }
-	// }
-	
-	// array(
-		// "LI" =>
-	// );
 	function add_space($x) {
 		return ($x <= 1) ? ' ' : ' ' . add_space($x - 1);
 	}
 	
+	// Creates html structure
 	class HTML_Structure
 	{
 		
@@ -131,13 +62,12 @@
 			$this->ftp = $ftp;
 			
 			$this->run();
-			//var_dump($this->html);
 		}
 		
 		public function run() 
 		{
 			$this->actual_path = "";
-			$this->html = $this->process_level($this->ftp->getCurrentDir() . '/', "");
+			$this->html = '<li rel="folder"><a>' . get_name_rec($this->ftp->getCurrentDir()) . '</a>' . $this->process_level($this->ftp->getCurrentDir() . '/', "") . '</li>';
 
 			//Debugging purpose
 			if ($level != 0 || $open_tag != 0)
@@ -149,14 +79,14 @@
 		//Read a whole directory
 		public function process_level($path, $html)
 		{
-			// var_dump($path);
 			$content = $this->ftp->ftpRawList($path);
-			// var_dump($path);
-			// var_dump($content);
+			if ($content == '')
+			{
+				return $html;
+			}
+			$html .= $this->add_deep();
+			
 			$self = $this;
-			
-			$html .= $self->add_deep();
-			
 			// Anonymous function to bind $path with process elem and allow $fun to be used as fn for the fold
 			$fun = function($html, $elem) use ($self, $path) {
 				return $self->process_elem($html, $elem, $path);
@@ -169,7 +99,7 @@
 		// Process each elem and go in deeper if needed
 		public function process_elem($html, $elem, $path)
 		{
-			$elem = new Elem($elem, $path);
+			$elem = new Elem($elem, $path, $this->ftp->currentDir);
 			
 			// Ajout du tag <li rel=" ... 
 			$html .= $this->add_tag($elem);
@@ -187,7 +117,6 @@
 		public function add_tag($elem) 
 		{
 			$this->open_tag++;
-			//$class = ($elem->is_image()) ? 'class="view_image_action" meta-name="' . $elem->name . '" meta-path="' . $elem->path . '"' : '';
 			return '<li ' . $elem->infos . ' rel="' . $elem->rel . '"><a>' . $elem->name . '</a>';
 		}
 		
@@ -236,82 +165,10 @@
 			$this->html .= '</li>';
 			return $this;
 		}
-		
-		// Recurse around ftpRawList to get whole directories into an array base tree
-		// public function scan_level($path, $array, $deep = 0)
-		// {
-			// $content = $this->ftp->ftpRawList($path);
-			// $self = $this;
-			
-			// $fun = function($array, $elem) use ($path, $self, $deep) {
-				// return $self->scan_elem($array, $elem, $path, $deep);
-			// };
-		
-			// return array_reduce($content, $fun, $html);
-		// }
-		
-		// public function scan_elem ($array, $elem, $path, $deep)
-		// {
-			// $elem = new Elem($elem);
-			
-			// echo add_space($deep) . $elem->prop['name'] . PHP_EOL;
-				
-			// // Si c'est un directory, ça s'arrête ici
-			// if ($elem->prop['is_dir'] !== true)
-			// {
-				// return;
-			// }
-			
-			// // Sinon, recusion all the way
-			// return $this->scan_level($path . $elem->prop['name'] . '/', $array, $deep + 1);
-			
-		// }
-		
-		// public function process_level2($path, $html)
-		// {
-			// // var_dump($path);
-			// // $origine = $this->actual_path;
-			// // $this->actual_path += $path;
-			// $this->actual_path = $path;
-			// $content = $this->ftp->ftpRawList($path);
-			// // $tmp = $this->add_deep() . array_reduce($content, "process_elem", $html) . $this->end_deep;
-			// // $this->actual_path = $origine;
-			// // return $tmp;
-			// // $fun = function ($html, $elem) {
-				// // return $this->process_elem($html, $elem); 
-			// // };
-			// $self = $this;
-			// $fun = function($html, $elem) use ($self) {
-				// $html .= $self->process_elem2($html, $elem);
-				// return $html;
-			// };
-			// // var_dump($html);
-			// $html .= $this->add_deep() . array_reduce($content, $fun, $html) . $this->end_deep();
-			// var_dump(array_reduce($content, $fun, $html));
-			// return $html;
-		// }
-
-		// public function process_elem2($html, $elem)
-		// {
-			// $elem = new Elem($elem);
-			
-			// $html .= $this->add_tag($elem->prop['name'], $elem->rel);
-			// // var_dump($elem->prop['is_dir']);
-			// if (!$elem->prop['is_dir'])
-			// {
-				// return $html . $this->close_tag();
-			// }
-			// $html .= $this->process_level2($this->actual_path . $elem->prop['name'] . '/', $html);
-			// // var_dump($html);
-		// }
 	}
 	
-	// class ProcessTree {
-		
-		// public function __construct(
-		
-	// }
-	/* Defines basic property of elements in the tree structure */
+	
+	// Defines basic property of elements in the tree structure
 	class Elem {
 		
 		public $parent;
@@ -322,27 +179,15 @@
 		public $img_exts;
 		public $txt_exts;
 		public $infos;
-		public function __construct($elem, $path = null)
+		public function __construct($elem, $path = null, $path_ftp)
 		{
-			/*$this->prop = array (
-				"is_dir" => $elem['is_dir'],
-				"extension" => $elem['extension'],
-				"name" =>$elem['name"'],
-				"perms" => $elem['perms'],
-				"num" => $elem['num'],
-				"size" => $elem['size'],
-				"date" => $elem['date" => '],
-				"is_link" => $elem['is_link'],
-				"target" => $elem['target'],
-			);
-			*/
 				
 			$this->prop = $elem;
 			$this->rel = ($this->prop['is_dir'] === true) ? 'folder' : 'default';
 			
-			// !!! will need some adjustment !!! //
-			// $path = './' . substr($path, strlen('/QuacoFTP/'));
-			$path = './' . substr($path, strlen($_SESSION['PATH_FTP'] . '/'));
+			// If you want relative path
+			// $path = str_replace('//', '/', './' . substr($path, strlen($path_ftp)));
+			
 			$this->path = $path . $this->name;
 			
 			$this->img_exts = array('.jpg', '.jpeg', '.png', '.gif', '.bmp');

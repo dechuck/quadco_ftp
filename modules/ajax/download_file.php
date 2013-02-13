@@ -27,8 +27,15 @@
 		// }
 		ob_clean();
 		flush();
-		$ftp->get($file, $file_name);
-		readfile($file_name);
+		if ($_POST['is_img'])
+		{
+			$ftp->get_img($file, 'php://output');
+		}
+		else
+		{
+			$ftp->get($file, 'php://output');
+		}
+		readfile('php://output');
 		// unlink($file);
 	}
 
